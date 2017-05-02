@@ -42,7 +42,5 @@ feature 'restaurants' do
      expect(page).to have_content 'KFC'
      expect(current_path).to eq "/restaurants/#{kfc.id}"
     end
-
   end
-
 end
