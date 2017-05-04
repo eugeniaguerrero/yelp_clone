@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20170504104250) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "description"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_restaurants_on_user_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -53,6 +55,7 @@ ActiveRecord::Schema.define(version: 20170504104250) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "restaurants", "users"
   add_foreign_key "reviews", "restaurants"
   add_foreign_key "reviews", "users"
 end
