@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 feature 'restaurants' do
+
+  before do
+    visit('/')
+    click_link('Sign up')
+    fill_in('Email', with: 'test@example.com')
+    fill_in('Password', with: 'testtest')
+    fill_in('Password confirmation', with: 'testtest')
+    click_button('Sign up')
+  end
+
   context 'no restaurants have been added' do
     scenario 'should display a prompt to add a restaurant' do
       visit '/restaurants'
@@ -10,13 +20,18 @@ feature 'restaurants' do
   end
 
   context 'restaurants have been added' do
+
     before do
-      Restaurant.create(name: 'Chicken Cottage')
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+      click_link 'Sign out'
     end
 
     scenario 'display restaurants' do
       visit '/restaurants'
-      expect(page).to have_content('Chicken Cottage')
+      expect(page).to have_content('KFC')
       expect(page).not_to have_content('No restaurants yet')
     end
   end
@@ -45,7 +60,13 @@ feature 'restaurants' do
 
   context 'viewing restaurants' do
 
-    let!(:kfc){ Restaurant.create(name:'KFC') }
+    before do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+      click_link 'Sign out'
+    end
 
     scenario 'lets a user view a restaurant' do
      visit '/restaurants'
@@ -74,12 +95,41 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
 
-    before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
-
     scenario 'removes a restaurant when a user clicks a delete link' do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).to have_content 'KFC deleted successfully'
+    end
+
+  end
+
+  context 'user permissions' do
+
+    before do
+      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
+      click_link 'Sign out'
+
+      visit('/')
+      click_link('Sign up')
+      fill_in('Email', with: 'test2@example.com')
+      fill_in('Password', with: 'testtest2')
+      fill_in('Password confirmation', with: 'testtest2')
+      click_button('Sign up')
+    end
+
+    scenario 'user cannot edit restaurant' do
+      visit '/restaurants'
+      click_link 'Edit KFC'
+      expect(page).to have_content 'Cannot edit restaurant details'
+      expect(current_path).to eq '/restaurants'
     end
 
   end
