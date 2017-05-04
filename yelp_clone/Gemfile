@@ -8,6 +8,7 @@ end
 gem 'devise', git: 'https://github.com/gogovan/devise.git', branch: 'rails-5.1'
 gem 'dotenv'
 gem 'rake'
+gem 'pry'
 
 gem 'webpacker', github: 'rails/webpacker'
 
