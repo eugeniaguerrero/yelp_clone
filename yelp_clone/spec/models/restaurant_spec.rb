@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe Restaurant, type: :model do
+
+  describe Restaurant, type: :model do
   it 'is not valid with a name of less than three characters' do
     restaurant = Restaurant.new(name: "kf")
     expect(restaurant).to have(1).error_on(:name)
@@ -12,7 +13,6 @@ describe Restaurant, type: :model do
     restaurant = Restaurant.create(name: "Moe's Tavern",user: User.create)
     expect(restaurant).to have(1).error_on(:name)
   end
-end
 
   describe 'reviews' do
     describe 'build_with_user' do
@@ -29,4 +29,29 @@ end
         expect(review.user).to eq user
       end
     end
+
+    describe '#average_rating' do
+      context 'no reviews' do
+        it "returns N/A when there are no reviews" do
+          restaurant = Restaurant.create(name: 'The Ivy')
+          expect(restaurant.average_rating).to eq 'N/A'
+        end
+      end
+      context '1 review' do
+        it 'returns that rating' do
+          restaurant = Restaurant.create(name: 'The Ivy', user: User.create)
+          restaurant.reviews.create(rating: 4, user: User.create)
+          expect(restaurant.average_rating).to eq 4
+        end
+      end
+      context 'multiple reviews' do
+        it 'returns the average' do
+          restaurant = Restaurant.create(name: 'The P', user: User.create)
+          restaurant.reviews.create(rating: 1, user: User.create)
+          restaurant.reviews.create(rating: 5, user: User.create)
+          expect(restaurant.average_rating).to eq 3
+        end
+      end
+    end
   end
+end

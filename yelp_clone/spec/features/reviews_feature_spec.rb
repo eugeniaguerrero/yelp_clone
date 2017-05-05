@@ -24,4 +24,10 @@ feature 'reviewing' do
     sign_up(email: 'test2@example.com')
     expect(page).not_to have_content("Delete review")
   end
+
+  scenario 'displays an average rating for all reviews' do
+    leave_review('so so', '3')
+    leave_review('so', '4')
+    expect(page).to have_content('Average rating 4')
+  end
 end
