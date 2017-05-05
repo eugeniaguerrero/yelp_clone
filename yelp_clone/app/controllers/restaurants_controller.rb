@@ -24,7 +24,6 @@ class RestaurantsController < ApplicationController
   end
 
   def edit
-    # require 'pry'; binding.pry
     if Restaurant.find(params[:id]).user == current_user
       @restaurant = Restaurant.find(params[:id])
     else
@@ -36,6 +35,9 @@ class RestaurantsController < ApplicationController
 
   def update
     @restaurant = Restaurant.find(params[:id])
+    # require 'pry'; binding.pry
+
+    @restaurant.image_url = "https://img.purch.com/h/1000/aHR0cDovL3d3dy5saXZlc2NpZW5jZS5jb20vaW1hZ2VzL2kvMDAwLzA0OC84NTAvb3JpZ2luYWwvY2FweWJhcmEtMDIuanBn"
     @restaurant.update(restaurant_params)
     redirect_to '/restaurants'
   end
