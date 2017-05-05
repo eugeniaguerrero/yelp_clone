@@ -8,7 +8,11 @@
       <%= link_to "Review #{restaurant.name}", new_restaurant_review_path(restaurant) %>
       <%# <% end %1> %>
     <% restaurant.reviews.each do |review| %>
-      <li><%= review.thoughts %>  <%=review.rating %> -  <%= review.user.email %></li>
+      <li><%= review.thoughts %>  <%=review.rating %> -  <%= review.user.email %>
+        <% if current_user == review.user %>
+          <%= link_to "Delete review", restaurant_review_path(review.restaurant_id, review.id), method: :delete %>
+        <% end %>
+      </li>
     <% end %>
   <% end %>
 <% else %>

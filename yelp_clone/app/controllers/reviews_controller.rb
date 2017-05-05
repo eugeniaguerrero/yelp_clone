@@ -13,6 +13,13 @@ before_action :authenticate_user!
     redirect_to '/restaurants'
   end
 
+  def destroy
+    @review = Review.find(params[:id])
+    @review.destroy
+    flash[:notice] = "Review deleted successfully"
+    redirect_to '/restaurants'
+  end
+
   private
 
   def review_params
