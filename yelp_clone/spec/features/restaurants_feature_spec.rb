@@ -97,7 +97,14 @@ feature 'restaurants' do
     scenario 'user cannot edit restaurant' do
       visit '/restaurants'
       click_link 'Edit KFC'
-      expect(page).to have_content 'Cannot edit restaurant details'
+      expect(page).to have_content "Cannot Edit a Restaurant you don't own"
+      expect(current_path).to eq '/restaurants'
+    end
+
+    scenario 'user cannot delete restaurant' do
+      visit '/restaurants'
+      click_link 'Delete KFC'
+      expect(page).to have_content "Cannot Delete a Restaurant you don't own"
       expect(current_path).to eq '/restaurants'
     end
 

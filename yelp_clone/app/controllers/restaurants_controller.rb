@@ -24,7 +24,14 @@ class RestaurantsController < ApplicationController
   end
 
   def edit
-    @restaurant = Restaurant.find(params[:id])
+    # require 'pry'; binding.pry
+    if Restaurant.find(params[:id]).user == current_user
+      @restaurant = Restaurant.find(params[:id])
+    else
+      flash[:notice] = "Cannot Edit a Restaurant you don't own"
+      redirect_to restaurants_path
+    end
+
   end
 
   def update
@@ -34,11 +41,16 @@ class RestaurantsController < ApplicationController
   end
 
   def destroy
-    @restaurant = Restaurant.find(params[:id])
-    name = @restaurant.name
-    @restaurant.destroy
-    flash[:notice] = "#{name} deleted successfully"
-    redirect_to '/restaurants'
+    if Restaurant.find(params[:id]).user == current_user
+      @restaurant = Restaurant.find(params[:id])
+      name = @restaurant.name
+      @restaurant.destroy
+      flash[:notice] = "#{name} deleted successfully"
+      redirect_to '/restaurants'
+    else
+      flash[:notice] = "Cannot Delete a Restaurant you don't own"
+      redirect_to '/restaurants'
+    end
   end
 
   private

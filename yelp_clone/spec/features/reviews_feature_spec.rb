@@ -2,8 +2,6 @@ require 'rails_helper'
 
 feature 'reviewing' do
 
-
-
   scenario 'allows users to leave a review using a form' do
      sign_up
      create_restaurant
